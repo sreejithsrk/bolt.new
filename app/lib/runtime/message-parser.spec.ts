@@ -159,6 +159,57 @@ describe('StreamingMessageParser', () => {
       runTest(input, expected);
     });
   });
+
+  it('should reset state when reset is called', () => {
+    const callbacks = {
+      onArtifactOpen: vi.fn<ArtifactCallback>((data) => {
+        expect(data).toMatchSnapshot('onArtifactOpen');
+      }),
+      onArtifactClose: vi.fn<ArtifactCallback>((data) => {
+        expect(data).toMatchSnapshot('onArtifactClose');
+      }),
+      onActionOpen: vi.fn<ActionCallback>((data) => {
+        expect(data).toMatchSnapshot('onActionOpen');
+      }),
+      onActionClose: vi.fn<ActionCallback>((data) => {
+        expect(data).toMatchSnapshot('onActionClose');
+      }),
+    };
+
+    const parser = new StreamingMessageParser({
+      artifactElement: () => '',
+      callbacks,
+    });
+
+    const firstMessage =
+      'Before <boltArtifact title="First" id="artifact_1">foo</boltArtifact> After';
+
+    let message = '';
+    for (const chunk of firstMessage.split('')) {
+      message += chunk;
+      parser.parse('message_1', message);
+    }
+
+    parser.reset();
+    vi.clearAllMocks();
+
+    const secondMessage =
+      'Before <boltArtifact title="Second" id="artifact_2">bar</boltArtifact> After';
+
+    message = '';
+    let result = '';
+
+    for (const chunk of secondMessage.split('')) {
+      message += chunk;
+      result += parser.parse('message_1', message);
+    }
+
+    expect(result).toEqual('Before  After');
+    expect(callbacks.onArtifactOpen).toHaveBeenCalledTimes(1);
+    expect(callbacks.onArtifactClose).toHaveBeenCalledTimes(1);
+    expect(callbacks.onActionOpen).toHaveBeenCalledTimes(0);
+    expect(callbacks.onActionClose).toHaveBeenCalledTimes(0);
+  });
 });
 
 function runTest(input: string | string[], outputOrExpectedResult: string | ExpectedResult) {
