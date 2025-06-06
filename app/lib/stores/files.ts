@@ -36,7 +36,7 @@ export class FilesStore {
   #size = 0;
 
   /**
-   * @note Keeps track all modified files with their original content since the last user message.
+   * @note Keeps track **of** all modified files with their original content since the last user message.
    * Needs to be reset when the user sends another message and all changes have to be submitted
    * for the model to be aware of the changes.
    */
