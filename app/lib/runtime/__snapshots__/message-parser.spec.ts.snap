@@ -218,3 +218,19 @@ exports[`StreamingMessageParser > valid artifacts without actions > should corre
   "title": "Some title",
 }
 `;
+
+exports[`StreamingMessageParser > should reset state when reset is called > onArtifactOpen 1`] = `
+{
+  "id": "artifact_2",
+  "messageId": "message_1",
+  "title": "Second",
+}
+`;
+
+exports[`StreamingMessageParser > should reset state when reset is called > onArtifactClose 1`] = `
+{
+  "id": "artifact_2",
+  "messageId": "message_1",
+  "title": "Second",
+}
+`;
