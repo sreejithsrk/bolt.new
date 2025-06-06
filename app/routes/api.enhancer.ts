@@ -11,7 +11,7 @@ export async function action(args: ActionFunctionArgs) {
 }
 
 async function enhancerAction({ context, request }: ActionFunctionArgs) {
-  const { message } = await request.json<{ message: string }>();
+  const { message, rules } = await request.json<{ message: string; rules?: string }>();
 
   try {
     const result = await streamText(
@@ -19,9 +19,9 @@ async function enhancerAction({ context, request }: ActionFunctionArgs) {
         {
           role: 'user',
           content: stripIndents`
-          I want you to improve the user prompt that is wrapped in \`<original_prompt>\` tags.
+          ${rules?.trim() || `I want you to improve the user prompt that is wrapped in \`<original_prompt>\` tags.
 
-          IMPORTANT: Only respond with the improved prompt and nothing else!
+          IMPORTANT: Only respond with the improved prompt and nothing else!`}
 
           <original_prompt>
             ${message}

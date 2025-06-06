@@ -171,6 +171,16 @@ const ActionList = memo(({ actions }: ActionListProps) => {
                   <div className="flex items-center w-full min-h-[28px]">
                     <span className="flex-1">Run command</span>
                   </div>
+                ) : type === 'git' ? (
+                  <div className="flex items-center w-full min-h-[28px]">
+                    <span className="flex-1">Git command</span>
+                  </div>
+                ) : type === 'image' ? (
+                  <div>Display image</div>
+                ) : type === 'chart' ? (
+                  <div>Render chart</div>
+                ) : type === 'doc' ? (
+                  <div>Show documentation</div>
                 ) : null}
               </div>
               {type === 'shell' && (

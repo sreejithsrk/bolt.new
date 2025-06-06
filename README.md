@@ -21,6 +21,15 @@ Whether you’re an experienced developer, a PM or designer, Bolt.new allows you
 
 For developers interested in building their own AI-powered development tools with WebContainers, check out the open-source Bolt codebase in this repo!
 
+## New Features
+
+- **Project Templates** – Start from popular stacks like React + Express or SvelteKit using `/api/templates`.
+- **Real-time Collaboration** – Experimental multi-user editing support in the WebContainer workspace.
+- **Customizable Prompt Enhancer** – Define your own rules for the `/api/enhancer` endpoint.
+- **Expanded Artifact Types** – Artifacts can now include images, charts and documentation snippets.
+- **Inline Tutorials** – The editor displays quick hints when actions run.
+- **Built-in Version Control** – Use `git` actions to commit and push directly from chat.
+
 ## Tips and Tricks
 
 Here are some tips to get the most out of Bolt.new:

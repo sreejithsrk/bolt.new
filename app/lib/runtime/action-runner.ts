@@ -110,6 +110,16 @@ export class ActionRunner {
           await this.#runFileAction(action);
           break;
         }
+        case 'git': {
+          await this.#runGitAction(action);
+          break;
+        }
+        case 'image':
+        case 'chart':
+        case 'doc': {
+          // Non-runtime actions are handled in the UI
+          break;
+        }
       }
 
       this.#updateAction(actionId, { status: action.abortSignal.aborted ? 'aborted' : 'complete' });
@@ -176,6 +186,24 @@ export class ActionRunner {
     } catch (error) {
       logger.error('Failed to write file\n\n', error);
     }
+  }
+
+  async #runGitAction(action: ActionState) {
+    if (action.type !== 'git') {
+      unreachable('Expected git action');
+    }
+
+    const webcontainer = await this.#webcontainer;
+
+    const process = await webcontainer.spawn('jsh', ['-c', action.content], {
+      env: { GIT_AUTHOR_NAME: 'bolt', GIT_AUTHOR_EMAIL: 'bolt@example.com' },
+    });
+
+    action.abortSignal.addEventListener('abort', () => {
+      process.kill();
+    });
+
+    await process.exit;
   }
 
   #updateAction(id: string, newState: ActionStateUpdate) {

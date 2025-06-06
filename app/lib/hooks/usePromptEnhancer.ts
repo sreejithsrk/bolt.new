@@ -1,11 +1,14 @@
 import { useState } from 'react';
+import { useStore } from '@nanostores/react';
 import { createScopedLogger } from '~/utils/logger';
+import { promptEnhancerRulesStore } from '~/lib/stores/enhancer';
 
 const logger = createScopedLogger('usePromptEnhancement');
 
 export function usePromptEnhancer() {
   const [enhancingPrompt, setEnhancingPrompt] = useState(false);
   const [promptEnhanced, setPromptEnhanced] = useState(false);
+  const rules = useStore(promptEnhancerRulesStore);
 
   const resetEnhancer = () => {
     setEnhancingPrompt(false);
@@ -20,6 +23,7 @@ export function usePromptEnhancer() {
       method: 'POST',
       body: JSON.stringify({
         message: input,
+        rules,
       }),
     });
 
